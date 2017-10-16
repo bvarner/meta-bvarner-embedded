@@ -1,0 +1,26 @@
+From 210b4634775999bd400e264dd0df68cf8c81bc11 Mon Sep 17 00:00:00 2001
+From: bvarner <bryan@varnernet.com>
+Date: Mon, 16 Oct 2017 15:50:30 -0400
+Subject: [PATCH] Updated configure.ac to properly handle BIN_PATH when someone
+ overrides exec_prefix and bindir as arguments to ./configure.
+
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 1792b65..e0436cb 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -588,7 +588,7 @@ else
+     if test $exec_prefix = "NONE";then
+         BIN_PATH="$prefix/bin"
+     else
+-        BIN_PATH="$prefix/$bindir"
++        BIN_PATH="$bindir"
+     fi
+ fi
+ AC_SUBST(BIN_PATH)
+-- 
+2.11.0
+
