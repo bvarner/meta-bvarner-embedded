@@ -13,7 +13,7 @@ KERNEL_MODULE_PROBECONF += "bcm2835-v4l2"
 
 IMAGE_LINGUAS = "en-us"
 
-IMAGE_FEATURES += "ssh-server-openssh"
+IMAGE_FEATURES += "ssh-server-openssh read-only-rootfs"
 
 # Now that all these things are set, include the hwup image.
 include recipes-core/images/rpi-hwup-image.bb
@@ -21,25 +21,15 @@ include recipes-core/images/rpi-hwup-image.bb
 # Core Image stuff...
 IMAGE_INSTALL += " \
 	tzdata \
-	userland \
-	bzip2 \
     devmem2 \
-    dosfstools \
     ethtool \
-    fbset \
-    findutils \
     i2c-tools \
     iperf \
     iproute2 \
-    less \
-    memtester \
-    nano \
     procps \
-    rsync \
     sysfsutils \
     unzip \
     util-linux \
-    wget \
     zip \
     v4l-utils \
 "
@@ -53,12 +43,14 @@ IMAGE_INSTALL += " \
     linux-firmware-rtl8192cu \
     linux-firmware-rtl8192su \
     wireless-tools \
+    dhcp-client \
     wpa-supplicant \
 "
 
-# This image pulls in our ffmpeg.
+# Use or pistreamudp package.
 IMAGE_INSTALL += " \
-    ffmpeg \
+	ffmpeg \
+    pistreamudp \
 "
 
 set_local_timezone() {
@@ -69,9 +61,27 @@ load_v4l_driver() {
 	grep 'bcm2835-v4l2' ${IMAGE_ROOTFS}/etc/modules-load.d/piv4l2.conf || echo 'bcm2835-v4l2' >> ${IMAGE_ROOTFS}/etc/modules-load.d/piv4l2.conf
 }
 
+# ffmpeg expects the libs in /opt/vc/lib, even though they're in /usr/lib/...
+create_opt_lib_dir() {
+	mkdir -p ${IMAGE_ROOTFS}/opt/vc/lib
+	ln -sf /usr/lib/libopenmaxil.so ${IMAGE_ROOTFS}/opt/vc/lib/libopenmaxil.so
+	ln -sf /usr/lib/libbcm_host.so ${IMAGE_ROOTFS}/opt/vc/lib/libbcm_host.so
+}
+
+# Sets up an /etc/wpa_supplicant directory, where you can put configurations for 
+# wpa_supplicant for your network devices. 
+# Enables wpa_supplicant for 802.11 on wlan0
+setup_wpa_supplicant() {
+	mkdir -p ${IMAGE_ROOTFS}/etc/wpa_supplicant
+	cp ${IMAGE_ROOTFS}/etc/wpa_supplicant.conf ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+
+	ln -sf /lib/systemd/system/wpa_supplicant-nl80211@.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/wpa_supplicant-nl80211@wlan0.service
+}
+
 ROOTFS_POSTPROCESS_COMMAND += " \
     set_local_timezone ; \
     load_v4l_driver ; \
+    setup_wpa_supplicant ; \    
 "
 
 export IMAGE_BASENAME = "picam-image"
