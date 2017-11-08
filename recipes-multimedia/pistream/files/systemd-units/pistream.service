@@ -1,10 +1,10 @@
 [Unit]
-Description=PiStreamUDP
+Description=PiStream
 After=multi-user-.target
 
 [Service]
 Type=simple
-ExecStart=/bin/pistreamudp.sh
+ExecStart=/bin/pistream.sh
 
 [Install]
 WantedBy=multi-user.target

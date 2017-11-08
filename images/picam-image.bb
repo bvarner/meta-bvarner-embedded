@@ -13,7 +13,7 @@ KERNEL_MODULE_PROBECONF += "bcm2835-v4l2"
 
 IMAGE_LINGUAS = "en-us"
 
-IMAGE_FEATURES += "ssh-server-openssh read-only-rootfs"
+IMAGE_FEATURES += "read-only-rootfs"
 
 # Now that all these things are set, include the hwup image.
 include recipes-core/images/rpi-hwup-image.bb
@@ -47,10 +47,9 @@ IMAGE_INSTALL += " \
     wpa-supplicant \
 "
 
-# Use or pistreamudp package.
+# Use our pistream package.
 IMAGE_INSTALL += " \
-	ffmpeg \
-    pistreamudp \
+    pistream \
 "
 
 set_local_timezone() {
@@ -78,10 +77,15 @@ setup_wpa_supplicant() {
 	ln -sf /lib/systemd/system/wpa_supplicant-nl80211@.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/wpa_supplicant-nl80211@wlan0.service
 }
 
+disable_gettys() {
+	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
+}
+
 ROOTFS_POSTPROCESS_COMMAND += " \
     set_local_timezone ; \
     load_v4l_driver ; \
     setup_wpa_supplicant ; \    
+    disable_gettys ; \
 "
 
 export IMAGE_BASENAME = "picam-image"
