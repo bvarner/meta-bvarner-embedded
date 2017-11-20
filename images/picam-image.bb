@@ -78,6 +78,7 @@ setup_wpa_supplicant() {
 }
 
 disable_gettys() {
+	echo "disabling gettys..."
 	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
 }
 

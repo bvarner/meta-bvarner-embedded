@@ -1,6 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-PACKAGECONFIG += "networkd resolved timesyncd"
+PACKAGECONFIG += "networkd resolved timesyncd myhostname"
 PACKAGECONFIG_remove = "vconsole"
 
 SRC_URI += "file://wlan.network"
