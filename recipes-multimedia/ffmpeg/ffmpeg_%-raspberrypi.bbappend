@@ -1,5 +1,5 @@
 PACKAGECONFIG ??= "avdevice avfilter avcodec avformat swresample swscale postproc \
-                   bzlib gpl lzma theora x264 omx \
+                   bzlib gpl lzma theora omx \
                    ${@bb.utils.contains('DISTRO_FEATURES', 'x11', 'x11 xv', '', d)}"
 
 PACKAGECONFIG[omx] = "--enable-omx-rpi --enable-mmal"

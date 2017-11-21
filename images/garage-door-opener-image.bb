@@ -1,4 +1,4 @@
-SUMMARY = "An image for booting a Raspberry Pi to stream video from the cameara"
+SUMMARY = "An image for booting a Raspberry Pi to control a relay board hooked to a garage door opener."
 HOMEPAGE = "http://bvarner.github.io"
 LICENSE = "MIT"
 
@@ -9,12 +9,10 @@ IMAGE_FSTYPES += "rpi-sdimg"
 # Raspberry pi images...
 DEPENDS += "bcm2835-bootfiles"
 
-KERNEL_MODULE_AUTOLOAD += "bcm2835-v4l2"
-KERNEL_MODULE_PROBECONF += "bcm2835-v4l2"
-
 IMAGE_LINGUAS = "en-us"
 
 IMAGE_FEATURES += "read-only-rootfs"
+#EXTRA_IMAGE_FEATURES += "debug-tweaks"
 
 # Now that all these things are set, include the hwup image.
 include recipes-core/images/rpi-hwup-image.bb
@@ -31,7 +29,6 @@ IMAGE_INSTALL += " \
     unzip \
     util-linux \
     zip \
-    v4l-utils \
 "
 
 # WiFi Support
@@ -49,22 +46,11 @@ IMAGE_INSTALL += " \
 
 # Use our pistream package.
 IMAGE_INSTALL += " \
-    pistream \
+	pi-garage-door \
 "
 
 set_local_timezone() {
     ln -sf /usr/share/zoneinfo/EST5EDT ${IMAGE_ROOTFS}/etc/localtime
-}
-
-load_v4l_driver() {
-	grep 'bcm2835-v4l2' ${IMAGE_ROOTFS}/etc/modules-load.d/piv4l2.conf || echo 'bcm2835-v4l2' >> ${IMAGE_ROOTFS}/etc/modules-load.d/piv4l2.conf
-}
-
-# ffmpeg expects the libs in /opt/vc/lib, even though they're in /usr/lib/...
-create_opt_lib_dir() {
-	mkdir -p ${IMAGE_ROOTFS}/opt/vc/lib
-	ln -sf /usr/lib/libopenmaxil.so ${IMAGE_ROOTFS}/opt/vc/lib/libopenmaxil.so
-	ln -sf /usr/lib/libbcm_host.so ${IMAGE_ROOTFS}/opt/vc/lib/libbcm_host.so
 }
 
 # Sets up an /etc/wpa_supplicant directory, where you can put configurations for 
@@ -77,6 +63,12 @@ setup_wpa_supplicant() {
 	ln -sf /lib/systemd/system/wpa_supplicant-nl80211@.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/wpa_supplicant-nl80211@wlan0.service
 }
 
+# Overwrites the default apache2 configuration with the configuration from pi-garage-door
+config_apache2() {
+	rm ${IMAGE_ROOTFS}/etc/apache2/httpd.conf
+	ln -sf /etc/pi-garage-door/httpd.conf ${IMAGE_ROOTFS}/etc/apache2/httpd.conf
+}
+
 disable_gettys() {
 	echo "disabling gettys..."
 	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
@@ -84,9 +76,9 @@ disable_gettys() {
 
 ROOTFS_POSTPROCESS_COMMAND += " \
     set_local_timezone ; \
-    load_v4l_driver ; \
     setup_wpa_supplicant ; \    
+    config_apache2 ; \
     disable_gettys ; \
 "
 
-export IMAGE_BASENAME = "picam-image"
+export IMAGE_BASENAME = "garage-door-opener-image"

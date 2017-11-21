@@ -1,0 +1,8 @@
+[Match]
+Name=eth*
+
+[Network]
+DHCP=both
+
+[DHCP]
+RouteMetric=10

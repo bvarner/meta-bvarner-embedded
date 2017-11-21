@@ -1,0 +1,9 @@
+[Unit]
+Description=Pi Garage Door Output Pin Initializer
+
+[Service]
+Type=oneshot
+ExecStart=/bin/pi-garage-door-init.sh
+ 
+[Install]
+WantedBy=multi-user.target
