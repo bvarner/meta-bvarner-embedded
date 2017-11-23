@@ -84,15 +84,15 @@ using relative paths.
 	cd ~/Documents/yocto-builds
 	export YOCTO_DIR=`pwd`
 	
-	cp ~/Documents/yocto-builds/poky-rocko/meta-bvarner-embedded/project-templates/garage-door-opener/*.conf ~/Documents/yocto-builds/projects/garage-door-opener/build/conf
-	sed -i 's|%YOCTO_DIR%|'$YOCTO_DIR'|g' ~/Documents/yocto-builds/projects/garage-door-opener/build/conf/bblayers.conf
-	sed -i 's|%SHARED_DIR%|'$YOCTO_DIR'/shared|g' ~/Documents/yocto-builds/projects/garage-door-opener/build/conf/local.conf
-	sed -i 's|%PROJECT_DIR%|'$YOCTO_DIR'/' ~/Documents/yocto-builds/projects/garage-door-opener/build/conf/local.conf
+	cp ~/Documents/yocto-builds/poky-rocko/meta-bvarner-embedded/project-templates/garage-door-opener/*.conf ~/Documents/yocto-builds/projects/garage-door-opener/conf
+	sed -i 's|%YOCTO_DIR%|'$YOCTO_DIR'|g' ~/Documents/yocto-builds/projects/garage-door-opener/conf/bblayers.conf
+	sed -i 's|%SHARED_DIR%|'$YOCTO_DIR'/shared|g' ~/Documents/yocto-builds/projects/garage-door-opener/conf/local.conf
+	sed -i 's|%PROJECT_DIR%|'$YOCTO_DIR'/' ~/Documents/yocto-builds/projects/garage-door-opener/conf/local.conf
 ```
  4. To build: "source" the bitbake environment pointing to your project directory and then run 'bitbake'. :-)
  
 ```
-	source ~/Documents/yocto-builds/poky-rocko/oe-init-build-env ~/Documents/yocto-builds/projects/garage-door-opener/build
+	source ~/Documents/yocto-builds/poky-rocko/oe-init-build-env ~/Documents/yocto-builds/projects/garage-door-opener
 	bitbake garage-door-opener
 ```
 
