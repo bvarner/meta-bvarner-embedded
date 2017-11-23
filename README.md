@@ -1,4 +1,100 @@
-# meta-bvarner-embedded
-OpenEmbedded bitbake recipes I've cooked up.
+OpenEmbedded bitbake recipes I've cooked up. 
+What you see here is a reflection of what I currently have figured out with yocto, and parts of it will improve as I do.
 
-Add this as a layer, and bake away. :-)
+# Images you could build.
+## picam-image
+	A bare-bones read-only rootfs image that streams a raspicam in 1080HD over a network socket encapsulated in mpegts.
+	I normally use this with a pi zero w, and a 3d printed enclosure. All TTYs are disabled, there is no SSH server.
+
+## garage-door-opener-image
+	A bare-bones read-only rootfs image that can control a relay board on wiringpi pin 7, and hosts a webapp to let you
+	fiddle with it. The pi boots, using kernel 4.9.x, sets the pin high, and starts apache+php to serve the 'button' app
+	over HTTP. It publishes it's location using avahi mDNS (zeroconf), so you can use DHCP and not have to worry about
+	IP reservations. All TTYs are disabled, there is no SSH server.
+
+# How to use this repository.
+
+## Setup your environment.
+ 1. You'll need a linux environment to build. Anything supported by yocto-pocky in the rocko release will do nicely: It's also likely others will work.
+    * poky 2.2 through 2.3
+    * ubuntu 15.04 through 17.04
+    * fedora 24 through 26
+    * centos 7
+    * debian 8 or 9
+    * opensuse-42.1 or 42.2
+    
+    On ubuntu / debian, you'll need to:
+    ```
+    sudo apt-get install build-essential chrpath diffstat libncurses5-dev texinfo
+    ```
+    You may also need:
+    ```
+    sudo apt-get install python2.7
+    ```
+    
+ 2. You'll need to create directories for the following:
+    * The workspace (where we keep recipes)
+    * Your project configurations (where you setup your source and target definitions for what you want to build)
+    I've settled on the following structure, which is what I'll follow for this readme.
+    
+```    
+	# Where we'll keep things.
+    mkdir -p ~/Documents/yocto-builds/
+    
+    # Where we'll create project directories 
+    # to configure local.conf and bblayers.conf
+    # for each project (image/device) we build.
+    mkdir -p ~/Documents/yocto-builds/projects
+    
+    # Where things shared between build will go
+    mkdir -p ~/Documents/yocto-builds/shared/sources
+    # Where build output goes
+    mkdir -p ~/Documents/yocto-builds/shared/tmp
+    
+```
+ 3. With those commands out of the way, let's get the stuff we need downloaded.
+```
+ 	cd ~/Documents/yocto-builds/
+ 	git clone -b rocko git://git.yoctoproject.org/poky.git poky-rocko
+    cd poky-rocko
+    git clone -b rocko git://git.openembedded.org/meta-openembedded
+    git clone -b rocko git://git.yoctoproject.org/meta-security
+    git clone -b rocko git://git.yoctoproject.org/meta-raspberrypi
+    git clone https://github.com/bvarner/meta-bvarner-embedded.git
+```
+So now inside of ~/Documents/yocto-builds/poky-rocko you should have all your recipe layers checked out.
+These directories shouldn't need much tweaking, unless you're contributing changes back upstream.
+If you haven't done a build in a long, long time, cd into each directory you checked out and `git pull` to get updates.
+ 4. Initialize a project directory.
+For this step, I'll use the example of setting up the garage-door-opener-image for a raspberrypi.
+We'll use the bitbake oe-init-build-env script to create a basic project layout.
+```
+	mkdir -p ~/Documents/yocto-builds/projects/garage-door-opener
+	cd ~/Documents/yocto-builds
+	source poky-rocko/oe-init-build-env ~/Documents/yocto-builds/projects/garage-door-opener
+```
+This gets you the generic configuration what recipe layers to include and a 'stock' local.conf for setting up your 
+target device and other settings. For the garage-door-opener, we need to customize these files.
+
+I've put together some 'stock' files and committed them in my layer. We'll use those as a basis, but 
+we'll have to do some search / replace to make sure our directory paths are correct -- yocto is a bit picky about not 
+using relative paths.
+
+```
+	cd ~/Documents/yocto-builds
+	export YOCTO_DIR=`pwd`
+	
+	cp ~/Documents/yocto-builds/poky-rocko/meta-bvarner-embedded/project-templates/garage-door-opener/*.conf ~/Documents/yocto-builds/projects/garage-door-opener/build/conf
+	sed -i 's|%YOCTO_DIR%|'$YOCTO_DIR'|g' ~/Documents/yocto-builds/projects/garage-door-opener/build/conf/bblayers.conf
+	sed -i 's|%SHARED_DIR%|'$YOCTO_DIR'/shared|g' ~/Documents/yocto-builds/projects/garage-door-opener/build/conf/local.conf
+	sed -i 's|%PROJECT_DIR%|'$YOCTO_DIR'/' ~/Documents/yocto-builds/projects/garage-door-opener/build/conf/local.conf
+```
+ 4. To build: "source" the bitbake environment pointing to your project directory and then run 'bitbake'. :-)
+ 
+```
+	source ~/Documents/yocto-builds/poky-rocko/oe-init-build-env ~/Documents/yocto-builds/projects/garage-door-opener/build
+	bitbake garage-door-opener
+```
+
+	
+
