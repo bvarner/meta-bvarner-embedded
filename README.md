@@ -98,8 +98,14 @@ Yocto is a bit picky about not using relative paths, we'll start by getting the 
  
 ```
 	source ~/Documents/yocto-builds/poky-rocko/oe-init-build-env ~/Documents/yocto-builds/projects/garage-door-opener
-	bitbake garage-door-opener
+	bitbake garage-door-opener-image
+```
+ 5. Once built, the raspberrypi SD card image will be in **~/Documents/yocto-builds/shared/tmp/deploy/images/raspberrypi/garage-door-opener-image-raspberrypi.rpi-sdimg**
+ 
+ To get a bootable SD card image you can `dd` that to your SD card device. On my machine, that looks something like this:
+```
+ 	sudo dd if=~/Documents/yocto-builds/shared/tmp/deploy/images/raspberrypi/garage-door-opener-image-raspberrypi.rpi-sdimg of=/dev/mmcblk0 bs=4M
 ```
 
-	
+Happy Hacking!	
 
