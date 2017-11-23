@@ -92,7 +92,7 @@ Yocto is a bit picky about not using relative paths, we'll start by getting the 
 	# Do the replacements using sed, substituting our 
 	sed -i 's|%YOCTO_DIR%|'$YOCTO_DIR'|g' ~/Documents/yocto-builds/projects/garage-door-opener/conf/bblayers.conf
 	sed -i 's|%SHARED_DIR%|'$YOCTO_DIR'/shared|g' ~/Documents/yocto-builds/projects/garage-door-opener/conf/local.conf
-	sed -i 's|%PROJECT_DIR%|'$YOCTO_DIR'/projects/garage-door-opener/|g' ~/Documents/yocto-builds/projects/garage-door-opener/conf/local.conf
+	sed -i 's|%PROJECT_DIR%|'$YOCTO_DIR'/projects/garage-door-opener|g' ~/Documents/yocto-builds/projects/garage-door-opener/conf/local.conf
 ```
  4. To build: "source" the bitbake environment pointing to your project directory and then run 'bitbake'. :-)
  
