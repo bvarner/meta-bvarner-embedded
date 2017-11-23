@@ -73,21 +73,26 @@ We'll use the bitbake oe-init-build-env script to create a basic project layout.
 	cd ~/Documents/yocto-builds
 	source poky-rocko/oe-init-build-env ~/Documents/yocto-builds/projects/garage-door-opener
 ```
-This gets you the generic configuration what recipe layers to include and a 'stock' local.conf for setting up your 
-target device and other settings. For the garage-door-opener, we need to customize these files.
+This gets you the generic configuration with recipe layers to include and a 'stock' local.conf for setting up your 
+target device and image settings. For the garage-door-opener, we need to customize these files.
 
-I've put together some 'stock' files and committed them in my layer. We'll use those as a basis, but 
-we'll have to do some search / replace to make sure our directory paths are correct -- yocto is a bit picky about not 
-using relative paths.
+I've put together some 'stock' files and committed them in my layer. You can overwrite the bitbake defaults with my 
+templates and then do some search / replace magic to make sure our directory paths are correct.
+
+Yocto is a bit picky about not using relative paths, we'll start by getting the full path with pwd and go from there.
 
 ```
+	# Get the full path to our yocto-builds directory and store it in an environment variable.
 	cd ~/Documents/yocto-builds
 	export YOCTO_DIR=`pwd`
 	
+	# Copy my configuration templates
 	cp ~/Documents/yocto-builds/poky-rocko/meta-bvarner-embedded/project-templates/garage-door-opener/*.conf ~/Documents/yocto-builds/projects/garage-door-opener/conf
+	
+	# Do the replacements using sed, substituting our 
 	sed -i 's|%YOCTO_DIR%|'$YOCTO_DIR'|g' ~/Documents/yocto-builds/projects/garage-door-opener/conf/bblayers.conf
 	sed -i 's|%SHARED_DIR%|'$YOCTO_DIR'/shared|g' ~/Documents/yocto-builds/projects/garage-door-opener/conf/local.conf
-	sed -i 's|%PROJECT_DIR%|'$YOCTO_DIR'/' ~/Documents/yocto-builds/projects/garage-door-opener/conf/local.conf
+	sed -i 's|%PROJECT_DIR%|'$YOCTO_DIR'/projects/garage-door-opener/|g' ~/Documents/yocto-builds/projects/garage-door-opener/conf/local.conf
 ```
  4. To build: "source" the bitbake environment pointing to your project directory and then run 'bitbake'. :-)
  
