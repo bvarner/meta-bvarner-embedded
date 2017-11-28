@@ -6,11 +6,19 @@ What you see here is a reflection of what I currently have figured out with yoct
 	A bare-bones read-only rootfs image that streams a raspicam in 1080HD over a network socket encapsulated in mpegts.
 	I normally use this with a pi zero w, and a 3d printed enclosure. All TTYs are disabled, there is no SSH server.
 
-## garage-door-opener-image
-	A bare-bones read-only rootfs image that can control a relay board on wiringpi pin 7, and hosts a webapp to let you
-	fiddle with it. The pi boots, using kernel 4.9.x, sets the pin high, and starts apache+php to serve the 'button' app
-	over HTTP. It publishes it's location using avahi mDNS (zeroconf), so you can use DHCP and not have to worry about
-	IP reservations. All TTYs are disabled, there is no SSH server.
+## pigaragedoor-image
+	A bare-bones read-only rootfs image that can control a relay board on wiringpi pin 7 (GPIO 4).
+	
+	When the service starts, it sets the pin HIGH. (It is assumed that pi header pin 7 is connected to an active-low relay board).
+	The service exposes a simple web form with a big button (http://garage-door.local), which does an HTTP GET to /press.
+	When the GET /press is handled, it toggles the state of the pin for 1 second and sends a redirect to '/' (the form).
+	
+	The pi boots using kernel 4.9.x and the hostname and http service are published via mDNS (zeroconf / avahi) so you
+	don't need to worry about DHCP IP reservations, static IP config, or manual DNS setup.
+	
+	All TTYs are disabled, there is no SSH server, and root logins are disabled.
+	The service is hosted via the hardended Golang HTTP server, and does not host any data off the filesystem.
+	All resources are in-memory and compiled into the binary.
 
 # How to use this repository.
 
@@ -98,14 +106,13 @@ Yocto is a bit picky about not using relative paths, we'll start by getting the 
  
 ```
 	source ~/Documents/yocto-builds/poky-rocko/oe-init-build-env ~/Documents/yocto-builds/projects/garage-door-opener
-	bitbake garage-door-opener-image
+	bitbake pigaragedoor-image
 ```
- 5. Once built, the raspberrypi SD card image will be in **~/Documents/yocto-builds/shared/tmp/deploy/images/raspberrypi/garage-door-opener-image-raspberrypi.rpi-sdimg**
+ 5. Once built, the raspberrypi SD card image will be in **~/Documents/yocto-builds/shared/tmp/deploy/images/raspberrypi/pigaragedoor-image-raspberrypi.rpi-sdimg**
  
  To get a bootable SD card image you can `dd` that to your SD card device. On my machine, that looks something like this:
 ```
- 	sudo dd if=~/Documents/yocto-builds/shared/tmp/deploy/images/raspberrypi/garage-door-opener-image-raspberrypi.rpi-sdimg of=/dev/mmcblk0 bs=4M
+ 	sudo dd if=~/Documents/yocto-builds/shared/tmp/deploy/images/raspberrypi/pigaragedoor.rpi-sdimg of=/dev/mmcblk0 bs=4M
 ```
 
 Happy Hacking!	
-

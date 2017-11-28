@@ -1,2 +1,0 @@
-SYSTEMD_PACKAGES += "${PN}"
-SYSTEMD_AUTO_ENABLE_${PN} = "enable"

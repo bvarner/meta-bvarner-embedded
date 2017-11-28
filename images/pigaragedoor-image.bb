@@ -20,15 +20,6 @@ include recipes-core/images/rpi-hwup-image.bb
 # Core Image stuff...
 IMAGE_INSTALL += " \
 	tzdata \
-    devmem2 \
-    ethtool \
-    i2c-tools \
-    iproute2 \
-    procps \
-    sysfsutils \
-    unzip \
-    util-linux \
-    zip \
 "
 
 # WiFi Support
@@ -46,7 +37,7 @@ IMAGE_INSTALL += " \
 
 # Use our pistream package.
 IMAGE_INSTALL += " \
-	pi-garage-door \
+	pigaragedoor \
 "
 
 set_local_timezone() {
@@ -63,22 +54,29 @@ setup_wpa_supplicant() {
 	ln -sf /lib/systemd/system/wpa_supplicant-nl80211@.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/wpa_supplicant-nl80211@wlan0.service
 }
 
-# Overwrites the default apache2 configuration with the configuration from pi-garage-door
-config_apache2() {
-	rm ${IMAGE_ROOTFS}/etc/apache2/httpd.conf
-	ln -sf /etc/pi-garage-door/httpd.conf ${IMAGE_ROOTFS}/etc/apache2/httpd.conf
-}
-
 disable_gettys() {
 	echo "disabling gettys..."
 	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
 }
 
+setup_wifi() {
+	echo "Setting up wifi..."	
+
+# Copy the echo statements below, and uncomment them.
+# Replace YOUR_SSID_NAME below with your actual SSID name.
+# Replace the PSK_KEY with the value returned from using the `wpa_passphrase` utility to generate the PSK.
+
+#	echo 'network={' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+#	echo '    ssid="YOUR_SSID_NAME"' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+#	echo '    psk=PSK_KEY' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+#	echo '}' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf		
+}
+
 ROOTFS_POSTPROCESS_COMMAND += " \
     set_local_timezone ; \
-    setup_wpa_supplicant ; \    
-    config_apache2 ; \
+    setup_wpa_supplicant ; \
     disable_gettys ; \
+    setup_wifi ; \
 "
 
-export IMAGE_BASENAME = "garage-door-opener-image"
+export IMAGE_BASENAME = "pigaragedoor-image"
