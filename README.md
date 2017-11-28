@@ -62,8 +62,8 @@ What you see here is a reflection of what I currently have figured out with yoct
 ```
  3. With those commands out of the way, let's get the stuff we need downloaded.
 ```
- 	cd ~/Documents/yocto-builds/
- 	git clone -b rocko git://git.yoctoproject.org/poky.git poky-rocko
+    cd ~/Documents/yocto-builds/
+    git clone -b rocko git://git.yoctoproject.org/poky.git poky-rocko
     cd poky-rocko
     git clone -b rocko git://git.openembedded.org/meta-openembedded
     git clone -b rocko git://git.yoctoproject.org/meta-security
