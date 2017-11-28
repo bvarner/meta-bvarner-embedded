@@ -68,7 +68,7 @@ What you see here is a reflection of what I currently have figured out with yoct
     git clone -b rocko git://git.openembedded.org/meta-openembedded
     git clone -b rocko git://git.yoctoproject.org/meta-security
     git clone -b rocko git://git.yoctoproject.org/meta-raspberrypi
-    git clone https://github.com/bvarner/meta-bvarner-embedded.git
+    git clone -b rocko https://github.com/bvarner/meta-bvarner-embedded.git
 ```
 So now inside of ~/Documents/yocto-builds/poky-rocko you should have all your recipe layers checked out.
 These directories shouldn't need much tweaking, unless you're contributing changes back upstream.
@@ -115,4 +115,4 @@ Yocto is a bit picky about not using relative paths, we'll start by getting the 
  	sudo dd if=~/Documents/yocto-builds/shared/tmp/deploy/images/raspberrypi/pigaragedoor.rpi-sdimg of=/dev/mmcblk0 bs=4M
 ```
 
-Happy Hacking!	
+Happy Hacking!

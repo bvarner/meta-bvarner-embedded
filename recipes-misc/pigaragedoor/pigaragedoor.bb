@@ -39,3 +39,6 @@ do_install_append() {
 SYSTEMD_PACKAGES += "${PN}"
 SYSTEMD_SERVICE_${PN} = "pigaragedoor.service"
 SYSTEMD_AUTO_ENABLE_${PN} = "enable"
+
+# The file-rdeps is picking up a dependency to 'bash' from the shell-script to build this with travis. Yick.
+INSANE_SKIP_${PN}-dev = "file-rdeps"
