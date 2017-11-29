@@ -22,11 +22,13 @@ What you see here is a reflection of what I currently have figured out with yoct
 
 # How to use this repository.
 
-## The fast way: Scripted install / configuration / invocation of bitbake for Debian (Ubuntu) based systems.
+## The fast way: Quick N' Dirty Script.
 
-Create a directory on your system to house your bitbake source, working directories, and output.
+Create a directory on your system to house your bitbake source, working directories, and output for the project you want to build.
 Make that directory your working directory.
 Then run the script from the github server in a terminal.
+
+You'll need 'sudo' access to make sure the proper packages are installed.
 
 ```
 mkdir -p ~/pigaragedoor
@@ -34,22 +36,14 @@ cd ~/pigaragedoor
 source <(wget -q https://raw.githubusercontent.com/bvarner/meta-bvarner-embedded/rocko/project-templates/garage-door-opener/setup-bitbake-and-build.sh -O -)
 ```
 
-You'll need to be a 'sudo' user for the above script to work. If you've just installed Debian, here's the quick-start to get you sudo access.
-```
-su -
-adduser <yourname> sudo
-```
+This script will run bitbake to build the image. It will download source and build the cross-compiling tool chain, libs, kernel, and userland applications that make up the image.
+This is not a 'small' amount of disk space or bandwidth. Expect it to take a while.
 
-Then log-out of your existing session (if you're using wayland / X11 you'll need to log out of that too) and log back in.
-
-You can confirm you have sudo access if you see 'sudo' listed in the results of running:
-```
-groups
-```
-from a command line.
+When finished, an SD card image file will be created at **shared/tmp/deploy/images/raspberrypi/pigaragedoor-image-raspberrypi.rpi-sdimg**, and a zip of that image will exist in the directory you ran the script in.
+You can make an image from that on linux with the 'dd' command, in the usual manner.
 
 
-## For separated project development (what the script does)
+## The slow way: Step-by-Step instructions for multi-project setup.
 
 If you care a bit more about what you're doing, you can follow these steps to setup an environment where projects share the build
 output directories for bitbake (reducing time for building multiple projects), but with a bit more manual setup required.
