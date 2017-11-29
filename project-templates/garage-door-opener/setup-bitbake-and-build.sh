@@ -1,6 +1,6 @@
 #!/bin/bash
 sudo apt-get update
-sudo apt-get install build-essential chrpath diffstat libncurses5-dev texinfo python2.7 git
+sudo apt-get install build-essential chrpath diffstat libncurses5-dev texinfo python2.7 git gawk
 
 
 # Checkout poky, the bsp layers, and oe-core / oe-security, and our layer.

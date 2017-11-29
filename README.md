@@ -22,7 +22,38 @@ What you see here is a reflection of what I currently have figured out with yoct
 
 # How to use this repository.
 
-## Setup your environment.
+## The fast way: Scripted install / configuration / invocation of bitbake for Debian (Ubuntu) based systems.
+
+Create a directory on your system to house your bitbake source, working directories, and output.
+Make that directory your working directory.
+Then run the script from the github server in a terminal.
+
+```
+mkdir -p ~/pigaragedoor
+cd ~/pigaragedoor
+source <(wget -q https://raw.githubusercontent.com/bvarner/meta-bvarner-embedded/rocko/project-templates/garage-door-opener/setup-bitbake-and-build.sh -O -)
+```
+
+You'll need to be a 'sudo' user for the above script to work. If you've just installed Debian, here's the quick-start to get you sudo access.
+```
+su -
+adduser <yourname> sudo
+```
+
+Then log-out of your existing session (if you're using wayland / X11 you'll need to log out of that too) and log back in.
+
+You can confirm you have sudo access if you see 'sudo' listed in the results of running:
+```
+groups
+```
+from a command line.
+
+
+## For separated project development (what the script does)
+
+If you care a bit more about what you're doing, you can follow these steps to setup an environment where projects share the build
+output directories for bitbake (reducing time for building multiple projects), but with a bit more manual setup required.
+
  1. You'll need a linux environment to build. Anything supported by yocto-pocky in the rocko release will do nicely: It's also likely others will work.
     * poky 2.2 through 2.3
     * ubuntu 15.04 through 17.04
@@ -33,7 +64,7 @@ What you see here is a reflection of what I currently have figured out with yoct
     
     On ubuntu / debian, you'll need to:
     ```
-    sudo apt-get install build-essential chrpath diffstat libncurses5-dev texinfo
+    sudo apt-get install build-essential chrpath diffstat libncurses5-dev texinfo gawk
     ```
     You may also need:
     ```
