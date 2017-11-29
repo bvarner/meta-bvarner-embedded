@@ -1,4 +1,6 @@
 #!/bin/bash
+sudo apt-get install build-essential chrpath diffstat libncurses5-dev texinfo python2.7
+
 
 # Checkout poky, the bsp layers, and oe-core / oe-security, and our layer.
 git clone -b rocko git://git.yoctoproject.org/poky.git poky-rocko
