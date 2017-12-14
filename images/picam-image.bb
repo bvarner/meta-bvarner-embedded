@@ -14,7 +14,9 @@ KERNEL_MODULE_PROBECONF += "bcm2835-v4l2"
 
 IMAGE_LINGUAS = "en-us"
 
-IMAGE_FEATURES += "read-only-rootfs"
+#IMAGE_FEATURES += "read-only-rootfs"
+EXTRA_IMAGE_FEATURES += "debug-tweaks"
+
 
 # Now that all these things are set, include the hwup image.
 include recipes-core/images/rpi-hwup-image.bb
@@ -79,7 +81,7 @@ setup_wpa_supplicant() {
 
 disable_gettys() {
 	echo "disabling gettys..."
-	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
+#	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
 }
 
 ROOTFS_POSTPROCESS_COMMAND += " \
