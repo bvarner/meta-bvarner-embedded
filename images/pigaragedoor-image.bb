@@ -15,10 +15,11 @@ IMAGE_FEATURES += "read-only-rootfs"
 #EXTRA_IMAGE_FEATURES += "debug-tweaks"
 
 # Now that all these things are set, include the hwup image.
-include recipes-core/images/rpi-hwup-image.bb
+include recipes-core/images/core-image-minimal.bb
 
 # Core Image stuff...
 IMAGE_INSTALL += " \
+	kernel-modules \
 	tzdata \
 "
 
