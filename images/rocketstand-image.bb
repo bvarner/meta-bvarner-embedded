@@ -33,6 +33,7 @@ IMAGE_INSTALL += " \
 
 IMAGE_INSTALL += " \
     go-hx711 \
+    go-raspicam \
 "
 
 # WiFi Support
