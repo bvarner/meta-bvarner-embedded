@@ -14,13 +14,4 @@ GO_LINKSHARED = ""
 GO_IMPORT = "github.com/dhowden/raspicam"
 GO_INSTALL = "${GO_IMPORT}"
 
-#RDEPENDS_${PN}-dev_append = "\
-#	bash \
-#"
-
 inherit go
-
-#do_install_append() {
-#	install -d ${D}${sysconfdir}/prometheus
-#	install -m 0644 ${WORKDIR}/prometheus.yml ${D}${sysconfdir}/prometheus
-#}

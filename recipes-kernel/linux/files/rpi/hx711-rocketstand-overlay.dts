@@ -1,0 +1,49 @@
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/pinctrl/bcm2835.h>
+#include <dt-bindings/gpio/gpio.h>
+
+/* Overlay for HX711 bit-banging on GPIO 5 (clock) and GPIO 6 (data) */
+
+/ {
+	compatible = "brcm,bcm2835", "brcm,bcm2708";
+	
+	fragment@0 {
+		target = <&gpio>;
+		__overlay__ {
+			hx711_pins: hx711_pins {
+				brcm,pins = <5 6>;
+				brcm,function = <
+					BCM2835_FSEL_GPIO_OUT
+					BCM2835_FSEL_GPIO_IN
+				>;
+			};
+		};
+	};
+	
+	
+	fragment@1 {
+		target-path = "/";
+		__overlay__ {
+			weight0: weight@0 {
+				compatible = "avia,hx711";
+				reg = <0>;
+				
+				sck-gpios = <&gpio 5 GPIO_ACTIVE_HIGH>;
+				dout-gpios = <&gpio 6 GPIO_ACTIVE_HIGH>;
+				avdd-supply = <&vdd_3v3_reg>;
+
+				status = "okay";
+			};
+		};
+	};
+	
+	
+	__overrides__ {
+		clock = <&weight0>, "sck-gpios:4",
+			<&hx711_pins>, "brcm,pins:0";
+		data = <&weight0>, "dout-gpios:4",
+			<&hx711_pins>, "brcm,pins:4";
+		vdd = <&weight0>, "avdd-supply:0";
+	};			
+};

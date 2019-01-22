@@ -8,6 +8,7 @@ IMAGE_FSTYPES += "rpi-sdimg"
 
 KERNEL_MODULE_AUTOLOAD += "bcm2835-v4l2"
 KERNEL_MODULE_PROBECONF += "bcm2835-v4l2"
+KERNEL_DEVICETREE += " overlays/hx711-rocketstand.dtbo"
 
 # Raspberry pi images...
 DEPENDS += "bcm2835-bootfiles"
@@ -32,6 +33,8 @@ IMAGE_INSTALL += " \
 "
 
 IMAGE_INSTALL += " \
+	pi-launch-control \
+	go-rpigpio \
     go-hx711 \
     go-raspicam \
 "

@@ -7,12 +7,13 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = "\
 	git://${GO_IMPORT} \
+	file://${BP}/src/${GO_IMPORT} \
 "
 SRCREV = "${AUTOREV}"
 
 GO_LINKSHARED = ""
 GO_IMPORT = "github.com/MichaelS11/go-hx711"
-GO_INSTALL = "${GO_IMPORT}/getAdjustValues"
+GO_INSTALL = "${GO_IMPORT}/..."
 
 DEPENDS = "\
 	periph \
@@ -23,8 +24,3 @@ RDEPENDS_${PN}-dev_append = "\
 "
 
 inherit go
-
-do_install_append() {
-#	install -d ${D}${sysconfdir}/prometheus
-#	install -m 0644 ${WORKDIR}/prometheus.yml ${D}${sysconfdir}/prometheus
-}
