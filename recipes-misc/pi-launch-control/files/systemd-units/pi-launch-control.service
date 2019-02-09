@@ -1,0 +1,9 @@
+[Unit]
+Description=Pi Launch Control
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/pi-launch-control
+ 
+[Install]
+WantedBy=multi-user.target
