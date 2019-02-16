@@ -72,6 +72,13 @@ setup_wpa_supplicant() {
 	ln -sf /lib/systemd/system/wpa_supplicant-nl80211@.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/wpa_supplicant-nl80211@wlan0.service
 }
 
+setup_certs() {
+	echo "installing SSL certs..."
+	# Copy local pem files to....
+	#cp /path/tofile/on/your/machine ${IMAGE_ROOTFS}/etc/ssl/certs/pi-launch-control.pem
+	#cp /path/tofile/on/your/machine ${IMAGE_ROOTFS}/etc/ssl/certs/pi-launch-control-key.pem
+}
+
 disable_gettys() {
 	echo "disabling gettys..."
 #	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
@@ -108,6 +115,7 @@ ROOTFS_POSTPROCESS_COMMAND += " \
     setup_wpa_supplicant ; \
     disable_gettys ; \
     setup_wifi ; \
+    setup_certs ;\
 "
 
 export IMAGE_BASENAME = "rocketstand-image"

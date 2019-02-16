@@ -20,6 +20,8 @@ DEPENDS = "\
 	periph \
 	go-raspicam \
 	avahi \
+	go-rice \
+	go-rice-native \
 "
 
 RDEPENDS_${PN}_append = "\
@@ -35,6 +37,8 @@ do_install_append() {
 	
 	install -d ${D}${sysconfdir}/avahi/services
 	install -m 0644 ${WORKDIR}/avahi/pi-launch-control.service ${D}${sysconfdir}/avahi/services
+
+	install -d ${D}${sysconfdir}/ssl/certs
 }
 
 SYSTEMD_PACKAGES += "${PN}"
