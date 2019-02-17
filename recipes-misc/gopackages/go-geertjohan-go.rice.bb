@@ -22,10 +22,10 @@ DEPENDS = "\
 	go-davecgh-go-spew \
 "
 
-#GO_LINKSHARED = ""
+GO_LINKSHARED = ''
 GO_IMPORT = "${PKG_NAME}"
 GO_INSTALL = "${GO_IMPORT}/..."
 
-BBCLASSEXTEND = "native"
+BBCLASSEXTEND += "native"
 
 inherit go

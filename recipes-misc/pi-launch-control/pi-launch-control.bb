@@ -5,23 +5,19 @@ HOMEPAGE = "https://github.com/bvarner/pi-launch-control/"
 LICENSE = "APSL-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/APSL-2.0;md5=f9e4701d9a216a87ba145bbe25f54c58"
 
+SRCNAME = "pi-launch-control"
+PKG_NAME = "github.com/bvarner/${SRCNAME}"
 SRC_URI = "\
-	git://${GO_IMPORT};branch=develop \
+	git://${PKG_NAME};branch=develop \
 	file://systemd-units/pi-launch-control.service \
 	file://avahi/pi-launch-control.service \
 "
-
 SRCREV = "${AUTOREV}"
-
-GO_IMPORT = "github.com/bvarner/pi-launch-control"
-GO_INSTALL = "${GO_IMPORT}/cmd/..."
 
 DEPENDS = "\
 	periph \
 	go-raspicam \
 	avahi \
-	go-rice \
-	go-rice-native \
 "
 
 RDEPENDS_${PN}_append = "\
@@ -29,7 +25,13 @@ RDEPENDS_${PN}_append = "\
 	avahi-autoipd \
 "
 
-inherit go systemd
+inherit go.rice systemd
+
+GO_LINKSHARED = ''
+GO_IMPORT = "${PKG_NAME}"
+GO_INSTALL = "${GO_IMPORT}/..."
+
+GO_RICE_APPEND = 'yes'
 
 do_install_append() {
 	install -d ${D}${systemd_unitdir}/system
