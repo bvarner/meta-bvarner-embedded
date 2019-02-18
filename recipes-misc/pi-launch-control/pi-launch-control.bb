@@ -31,6 +31,8 @@ GO_LINKSHARED = ''
 GO_IMPORT = "${PKG_NAME}"
 GO_INSTALL = "${GO_IMPORT}/..."
 
+RICE_ARGS = "-i ${GO_IMPORT}/pi-launch-control"
+
 GO_RICE_APPEND = 'yes'
 
 do_install_append() {
