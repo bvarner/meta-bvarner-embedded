@@ -1,7 +1,7 @@
 inherit go
 
-DEPENDS_GORICE_class-target = "go-geertjohan-go.rice go-geertjohan-go.rice-native"
-DEPENDS_GORICE_class-native =  "go-geertjohan-go.rice-native"
+DEPENDS_GORICE_class-target = "go-rice go-rice-native"
+DEPENDS_GORICE_class-native =  "go-rice-native"
 
 DEPENDS_append = " ${DEPENDS_GORICE}"
 

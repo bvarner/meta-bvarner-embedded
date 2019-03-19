@@ -8,15 +8,14 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/APSL-2.0;md5=f9e4701d9a216a87ba
 SRCNAME = "pi-launch-control"
 PKG_NAME = "github.com/bvarner/${SRCNAME}"
 SRC_URI = "\
-	git://${PKG_NAME};branch=develop \
+	git://${PKG_NAME};branch=feature/es6app \
 	file://systemd-units/pi-launch-control.service \
 	file://avahi/pi-launch-control.service \
 "
 SRCREV = "${AUTOREV}"
 
 DEPENDS = "\
-	periph \
-	go-raspicam \
+	go-reiver-go-v4l2 \
 	avahi \
 "
 
@@ -25,7 +24,11 @@ RDEPENDS_${PN}_append = "\
 	avahi-autoipd \
 "
 
-inherit go.rice systemd
+RDEPENDS_${PN}-staticdev_append = "\
+	perl \
+"
+
+inherit gorice godep systemd
 
 GO_LINKSHARED = ''
 GO_IMPORT = "${PKG_NAME}"

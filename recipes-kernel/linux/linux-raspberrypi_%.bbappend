@@ -6,8 +6,9 @@ SRC_URI += "file://hx711.cfg \
 "
 
 KERNEL_DEVICETREE += "overlays/hx711-rocketstand.dtbo"
-
 KERNEL_MODULE_AUTOLOAD += "iio-trig-sysfs"
+KERNEL_MODULE_AUTOLOAD += "bcm2835-v4l2"
+
 
 do_configure_prepend() {
     cp -f "${WORKDIR}/drivers/iio/adc/hx711.c" "${B}/source/drivers/iio/adc/hx711.c"

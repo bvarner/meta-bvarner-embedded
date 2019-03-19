@@ -35,9 +35,6 @@ IMAGE_INSTALL += " \
 IMAGE_INSTALL += " \
 	userland \
 	pi-launch-control \
-	go-rpigpio \
-    go-hx711 \
-    go-raspicam \
 "
 
 # WiFi Support
