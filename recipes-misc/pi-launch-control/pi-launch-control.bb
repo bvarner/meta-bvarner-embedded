@@ -15,7 +15,6 @@ SRC_URI = "\
 SRCREV = "${AUTOREV}"
 
 DEPENDS = "\
-	go-reiver-go-v4l2 \
 	avahi \
 "
 
