@@ -27,15 +27,31 @@ RDEPENDS_${PN}-staticdev_append = "\
 	perl \
 "
 
-inherit gorice godep systemd
+## begin godep hacking
+# godep is being really stupid as a class. It's deleting the Gopkg.toml and lock.
+#inherit gorice godep systemd
+# So we'll duplicate most of it's functionality here.
+DEPENDS_append = " go-dep-native"
+do_compile_prepend() {
+    ( cd ${WORKDIR}/build/src/${GO_IMPORT} && dep ensure -v )
+}
+## end godep hacking
+
+
+inherit gorice systemd
 
 GO_LINKSHARED = ''
 GO_IMPORT = "${PKG_NAME}"
 GO_INSTALL = "${GO_IMPORT}/..."
 
-RICE_ARGS = "-i ${GO_IMPORT}/pi-launch-control"
+# Add the pi-launch-control import path to the rice command.
+RICE_ARGS = "-v -i ${GO_IMPORT}/pi-launch-control"
+# Set it up to append to the exec in a zip format.
+GO_RICE_EMBEDTYPE = 'go'
+#GO_RICE_APPEND = 'yes'
 
-GO_RICE_APPEND = 'yes'
+
+
 
 do_install_append() {
 	install -d ${D}${systemd_unitdir}/system
@@ -50,6 +66,3 @@ do_install_append() {
 SYSTEMD_PACKAGES += "${PN}"
 SYSTEMD_SERVICE_${PN} = "pi-launch-control.service"
 SYSTEMD_AUTO_ENABLE_${PN} = "enable"
-
-# The file-rdeps is picking up a dependency to 'bash' from the shell-script to build this with travis. Yick.
-INSANE_SKIP_${PN}-dev = "file-rdeps"

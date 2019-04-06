@@ -10,7 +10,7 @@ PKG_NAME = "github.com/GeertJohan/${SRCNAME}"
 SRC_URI = "\
 	git://${PKG_NAME}.git \
 "
-SRCREV = "${AUTOREV}"
+SRCREV = "v1.0.0"
 
 DEPENDS = ""
 

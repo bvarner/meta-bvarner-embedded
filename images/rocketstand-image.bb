@@ -30,6 +30,7 @@ IMAGE_INSTALL += " \
     devmem2 \
     i2c-tools \
     v4l-utils \
+    dtc \
 "
 
 IMAGE_INSTALL += " \

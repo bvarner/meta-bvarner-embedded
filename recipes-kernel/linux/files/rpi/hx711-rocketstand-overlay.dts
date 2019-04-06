@@ -29,6 +29,9 @@
 				compatible = "avia,hx711";
 				reg = <0>;
 				
+				pinctrl-names = "default";
+				pinctrl-0 = <&hx711_pins>;
+				
 				sck-gpios = <&gpio 5 GPIO_ACTIVE_HIGH>;
 				dout-gpios = <&gpio 6 GPIO_ACTIVE_HIGH>;
 				avdd-supply = <&vdd_3v3_reg>;
@@ -38,12 +41,11 @@
 		};
 	};
 	
-	
 	__overrides__ {
-		clock = <&weight0>, "sck-gpios:4",
+		sck = <&weight0>, "sck-gpios:4",
 			<&hx711_pins>, "brcm,pins:0";
-		data = <&weight0>, "dout-gpios:4",
+		dout = <&weight0>, "dout-gpios:4",
 			<&hx711_pins>, "brcm,pins:4";
-		vdd = <&weight0>, "avdd-supply:0";
+		avdd = <&weight0>, "avdd-supply:0";
 	};			
 };
