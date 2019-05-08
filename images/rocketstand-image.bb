@@ -1,4 +1,4 @@
-SUMMARY = "An image for booting a Raspberry Pi to control a relay board hooked to a garage door opener."
+SUMMARY = "An image for running Pi-Launch-Control on a raspberry Pi Zero W."
 HOMEPAGE = "http://bvarner.github.io"
 LICENSE = "MIT"
 
@@ -47,7 +47,7 @@ IMAGE_INSTALL += " \
     linux-firmware-rtl8192cu \
     linux-firmware-rtl8192su \
     wireless-tools \
-    dhcp-client \
+	dhcp-client \
     wpa-supplicant \
 	avahi-daemon \
 	avahi-autoipd \
@@ -68,10 +68,30 @@ setup_wpa_supplicant() {
 	cp ${IMAGE_ROOTFS}/etc/wpa_supplicant.conf ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
 
 	ln -sf /lib/systemd/system/wpa_supplicant-nl80211@.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/wpa_supplicant-nl80211@wlan0.service
+	
+	# Hackup the wlan.network to setup wlan0 as a DHCP server with a static IP address.
+	rm ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	touch ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	
+	echo '[Match]' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'Name=wlan0' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo '[Network]' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'Address=192.168.1.1/24' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'DHCPServer=yes' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo '[DHCPServer]' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'PoolOffset=50' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'PoolSize=50' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'DefaultLeaseTimeSec=900s' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'EmitDNS=no' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'EmitNTP=no' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'EmitRouter=no' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
+	echo 'EmitTimezone=no' >> ${IMAGE_ROOTFS}/etc/systemd/network/wlan.network
 }
 
 setup_certs() {
 	echo "installing SSL certs..."
+	mkdir -p ${IMAGE_ROOTFS}/etc/ssl/certs
+	
 	# Copy local pem files to....
 	#cp /path/tofile/on/your/machine ${IMAGE_ROOTFS}/etc/ssl/certs/pi-launch-control.pem
 	#cp /path/tofile/on/your/machine ${IMAGE_ROOTFS}/etc/ssl/certs/pi-launch-control-key.pem
@@ -85,18 +105,18 @@ disable_gettys() {
 setup_wifi() {
 	echo "Setting up wifi..."	
 	
-# Sets up an ad-hoc SSID when no other networks are available.
-#	echo 'ap_scan=2;' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo 'network={' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo '    ssid="RocketStand"' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo '    mode=1' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo '    frequency=2432' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo '    proto=RSN' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo '    key_mgmt=WPA-PSK' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo '    pairwise=CCMP' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo '    group=CCMP' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo '    psk="ignition"' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
-#	echo '}' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf		
+# Sets up an ad-hoc SSID
+	echo 'ap_scan=2' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo 'network={' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo '    ssid="RocketStand"' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo '    mode=2' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo '    frequency=2432' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo '    proto=RSN' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo '    key_mgmt=WPA-PSK' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo '    pairwise=CCMP' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo '    group=CCMP' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo '    psk="ignition"' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
+	echo '}' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf		
 	
 # Copy the echo statements below, and uncomment them.
 # Replace YOUR_SSID_NAME below with your actual SSID name.

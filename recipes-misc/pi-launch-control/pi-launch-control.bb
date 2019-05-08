@@ -25,6 +25,7 @@ RDEPENDS_${PN}_append = "\
 
 RDEPENDS_${PN}-staticdev_append = "\
 	perl \
+	bash \
 "
 
 ## begin godep hacking
