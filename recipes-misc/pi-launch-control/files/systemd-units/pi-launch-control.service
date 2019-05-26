@@ -1,0 +1,11 @@
+[Unit]
+Description=Pi Launch Control
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/pi-launch-control
+ 
+[Install]
+WantedBy=multi-user.target

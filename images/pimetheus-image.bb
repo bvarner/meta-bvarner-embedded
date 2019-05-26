@@ -1,26 +1,26 @@
-SUMMARY = "An image for booting a Raspberry Pi to control a relay board hooked to a garage door opener."
+SUMMARY = "An image that sets up a raspberry pi as a Prometheus server and node."
 HOMEPAGE = "http://bvarner.github.io"
 LICENSE = "MIT"
 
-# Sets us up to use ext4 and generate an rpi-sdimg that'll boot
 SDIMG_ROOTFS_TYPE = "ext4"
 IMAGE_FSTYPES += "rpi-sdimg"
 
-# Raspberry pi images...
 DEPENDS += "bcm2835-bootfiles"
-
 IMAGE_LINGUAS = "en-us"
 
-IMAGE_FEATURES += "read-only-rootfs"
-#EXTRA_IMAGE_FEATURES += "debug-tweaks"
+#IMAGE_FEATURES += "read-only-rootfs"
+EXTRA_IMAGE_FEATURES += "debug-tweaks"
 
-# Now that all these things are set, include the hwup image.
 include recipes-core/images/core-image-minimal.bb
 
 # Core Image stuff...
 IMAGE_INSTALL += " \
 	kernel-modules \
 	tzdata \
+	go-runtime \
+	prometheus \
+	prometheus-node-exporter \
+	nano \
 "
 
 # WiFi Support
@@ -36,13 +36,9 @@ IMAGE_INSTALL += " \
     wpa-supplicant \
 "
 
-# Use our pistream package.
-IMAGE_INSTALL += " \
-	pigaragedoor \
-"
-
+# Sets the timezone to UTC.
 set_local_timezone() {
-    ln -sf /usr/share/zoneinfo/EST5EDT ${IMAGE_ROOTFS}/etc/localtime
+    ln -sf /usr/share/zoneinfo/UTC ${IMAGE_ROOTFS}/etc/localtime
 }
 
 # Sets up an /etc/wpa_supplicant directory, where you can put configurations for 
@@ -55,9 +51,14 @@ setup_wpa_supplicant() {
 	ln -sf /lib/systemd/system/wpa_supplicant-nl80211@.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/wpa_supplicant-nl80211@wlan0.service
 }
 
+
+disable_bootlogd() {
+    echo BOOTLOGD_ENABLE=no > ${IMAGE_ROOTFS}/etc/default/bootlogd
+}
+
 disable_gettys() {
 	echo "disabling gettys..."
-	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
+#	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
 }
 
 setup_wifi() {
@@ -71,6 +72,7 @@ setup_wifi() {
 #	echo '    ssid="YOUR_SSID_NAME"' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
 #	echo '    psk=PSK_KEY' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
 #	echo '}' >> ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf		
+
 }
 
 ROOTFS_POSTPROCESS_COMMAND += " \
@@ -80,4 +82,4 @@ ROOTFS_POSTPROCESS_COMMAND += " \
     setup_wifi ; \
 "
 
-export IMAGE_BASENAME = "pigaragedoor-image"
+export IMAGE_BASENAME = "pimetheus-image"
