@@ -46,7 +46,6 @@ IMAGE_INSTALL += " \
     linux-firmware-rtl8192ce \
     linux-firmware-rtl8192cu \
     linux-firmware-rtl8192su \
-    wireless-tools \
 	dhcp-client \
     wpa-supplicant \
 	avahi-daemon \
