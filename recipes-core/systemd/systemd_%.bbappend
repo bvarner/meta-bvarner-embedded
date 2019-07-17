@@ -1,6 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-PACKAGECONFIG += "networkd resolved timesyncd myhostname"
+PACKAGECONFIG += " randomseed sysusers kmod networkd resolved timesyncd myhostname"
 PACKAGECONFIG_remove = "vconsole"
 
 SRC_URI += "\

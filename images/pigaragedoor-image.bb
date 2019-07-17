@@ -2,10 +2,6 @@ SUMMARY = "An image for booting a Raspberry Pi to control a relay board hooked t
 HOMEPAGE = "http://bvarner.github.io"
 LICENSE = "MIT"
 
-# Sets us up to use ext4 and generate an rpi-sdimg that'll boot
-SDIMG_ROOTFS_TYPE = "ext4"
-IMAGE_FSTYPES += "rpi-sdimg"
-
 # Raspberry pi images...
 DEPENDS += "bcm2835-bootfiles"
 
@@ -15,28 +11,26 @@ IMAGE_FEATURES += "read-only-rootfs"
 #EXTRA_IMAGE_FEATURES += "debug-tweaks"
 
 # Now that all these things are set, include the hwup image.
-include recipes-core/images/core-image-minimal.bb
+include recipes-core/images/core-image-base.bb
+
+IMAGE_FEATURES_remove += "splash"
 
 # Core Image stuff...
 IMAGE_INSTALL += " \
-	kernel-modules \
 	tzdata \
 "
 
 # WiFi Support
 IMAGE_INSTALL += " \
     iw \
-    linux-firmware-bcm43430 \
-    linux-firmware-ralink \
+	linux-firmware-ralink \
     linux-firmware-rtl8192ce \
     linux-firmware-rtl8192cu \
     linux-firmware-rtl8192su \
-    wireless-tools \
     dhcp-client \
     wpa-supplicant \
 "
 
-# Use our pistream package.
 IMAGE_INSTALL += " \
 	pigaragedoor \
 "
@@ -57,7 +51,7 @@ setup_wpa_supplicant() {
 
 disable_gettys() {
 	echo "disabling gettys..."
-	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
+	rm -fr ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
 }
 
 setup_wifi() {

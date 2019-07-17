@@ -12,9 +12,17 @@ GO_LINKSHARED = ""
 GO_IMPORT = "github.com/prometheus/node_exporter"
 GO_INSTALL = "${GO_IMPORT}"
 
+
+RDEPENDS_${PN}_append = "\
+	go-runtime \
+"
+
 RDEPENDS_${PN}-dev_append = "\
 	gawk \
 	bash \
 "
+
+# The file-rdeps is picking up a dependency to 'ksh' from the openbsd examples.
+INSANE_SKIP_${PN}-dev = "file-rdeps"
 
 inherit go

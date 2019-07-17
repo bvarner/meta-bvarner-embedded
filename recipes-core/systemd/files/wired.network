@@ -2,7 +2,7 @@
 Name=eth*
 
 [Network]
-DHCP=both
+DHCP=yes
 
 [DHCP]
 RouteMetric=10

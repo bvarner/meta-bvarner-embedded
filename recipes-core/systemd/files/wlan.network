@@ -2,7 +2,7 @@
 Name=wlan*
 
 [Network]
-DHCP=both
+DHCP=yes
 
 [DHCP]
 RouteMetric=20

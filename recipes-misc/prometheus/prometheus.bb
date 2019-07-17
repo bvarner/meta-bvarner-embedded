@@ -15,6 +15,10 @@ GO_LINKSHARED = ""
 GO_IMPORT = "github.com/prometheus/prometheus"
 GO_INSTALL = "${GO_IMPORT}/cmd/..."
 
+RDEPENDS_${PN}_append = "\
+	go-runtime \
+"
+
 RDEPENDS_${PN}-dev_append = "\
 	bash \
 "
