@@ -46,6 +46,7 @@ setup_wpa_supplicant() {
 	mkdir -p ${IMAGE_ROOTFS}/etc/wpa_supplicant
 	cp ${IMAGE_ROOTFS}/etc/wpa_supplicant.conf ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
 
+	mkdir -p ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants
 	ln -sf /lib/systemd/system/wpa_supplicant-nl80211@.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/wpa_supplicant-nl80211@wlan0.service
 }
 

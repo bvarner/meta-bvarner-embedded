@@ -5,6 +5,5 @@ PACKAGECONFIG ??= "avdevice avfilter avcodec avformat swresample swscale postpro
 PACKAGECONFIG[omx] = "--enable-omx-rpi --enable-mmal"
 
 DEPENDS += "userland"
-DEPENDS_${PN} += "userland-dev"
 
 TARGET_CFLAGS += "-I${STAGING_DIR_TARGET}/usr/include/IL"
