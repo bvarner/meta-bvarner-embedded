@@ -1,4 +1,4 @@
-DESCRIPTION = "Use a raspberry pi to control a relay for a garage door opener."
+DESCRIPTION = "Use a raspberry pi to control model rocket launches."
 SECTION = "misc"
 HOMEPAGE = "https://github.com/bvarner/pi-launch-control/"
 

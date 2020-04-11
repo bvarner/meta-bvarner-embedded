@@ -1,0 +1,11 @@
+[Unit]
+Description=V4LMjpgStreamer
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/v4lmjpgstreamer
+ 
+[Install]
+WantedBy=multi-user.target

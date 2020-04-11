@@ -17,6 +17,9 @@ IMAGE_FEATURES_remove += "splash"
 
 # Core Image stuff...
 IMAGE_INSTALL += " \
+	${MACHINE_EXTRA_RRECOMMENDS} \
+	kernel-modules \
+	udev-rules-rpi \
 	tzdata \
 "
 
@@ -36,7 +39,7 @@ IMAGE_INSTALL += " \
 "
 
 set_local_timezone() {
-    ln -sf /usr/share/zoneinfo/EST5EDT ${IMAGE_ROOTFS}/etc/localtime
+    ln -sf /usr/share/zoneinfo/UTC ${IMAGE_ROOTFS}/etc/localtime
 }
 
 # Sets up an /etc/wpa_supplicant directory, where you can put configurations for 

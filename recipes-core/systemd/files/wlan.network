@@ -1,8 +1,11 @@
 [Match]
 Name=wlan*
 
+[Link]
+RequiredForOnline=yes
+
 [Network]
-DHCP=yes
+DHCP=ipv4
 
 [DHCP]
 RouteMetric=20

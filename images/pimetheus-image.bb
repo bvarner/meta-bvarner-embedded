@@ -6,16 +6,22 @@ SDIMG_ROOTFS_TYPE = "ext4"
 IMAGE_FSTYPES += "rpi-sdimg"
 
 DEPENDS += "bcm2835-bootfiles"
+
 IMAGE_LINGUAS = "en-us"
 
 #IMAGE_FEATURES += "read-only-rootfs"
+IMAGE_FEATURES += "ssh-server-openssh"
 EXTRA_IMAGE_FEATURES += "debug-tweaks"
+
+IMAGE_FEATURES_remove += "splash"
 
 include recipes-core/images/core-image-minimal.bb
 
 # Core Image stuff...
 IMAGE_INSTALL += " \
+	${MACHINE_EXTRA_RRECOMMENDS} \
 	kernel-modules \
+	udev-rules-rpi \
 	tzdata \
 	go-runtime \
 	prometheus \
@@ -26,14 +32,13 @@ IMAGE_INSTALL += " \
 # WiFi Support
 IMAGE_INSTALL += " \
     iw \
-    linux-firmware-bcm43430 \
     linux-firmware-ralink \
     linux-firmware-rtl8192ce \
     linux-firmware-rtl8192cu \
     linux-firmware-rtl8192su \
-    wireless-tools \
-    dhcp-client \
     wpa-supplicant \
+    avahi-daemon \
+    avahi-autoipd \
 "
 
 # Sets the timezone to UTC.
@@ -48,6 +53,7 @@ setup_wpa_supplicant() {
 	mkdir -p ${IMAGE_ROOTFS}/etc/wpa_supplicant
 	cp ${IMAGE_ROOTFS}/etc/wpa_supplicant.conf ${IMAGE_ROOTFS}/etc/wpa_supplicant/wpa_supplicant-nl80211-wlan0.conf
 
+	mkdir -p ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants
 	ln -sf /lib/systemd/system/wpa_supplicant-nl80211@.service ${IMAGE_ROOTFS}/etc/systemd/system/multi-user.target.wants/wpa_supplicant-nl80211@wlan0.service
 }
 
@@ -59,6 +65,15 @@ disable_bootlogd() {
 disable_gettys() {
 	echo "disabling gettys..."
 #	rm -f ${IMAGE_ROOTFS}/etc/systemd/system/getty.target.wants/*.service
+}
+
+setup_certs() {
+	echo "installing SSL certs..."
+	mkdir -p ${IMAGE_ROOTFS}/etc/ssl/certs
+	
+	# Copy local pem files to....
+	#cp /path/tofile/on/your/machine ${IMAGE_ROOTFS}/etc/ssl/certs/pi-launch-control.pem
+	#cp /path/tofile/on/your/machine ${IMAGE_ROOTFS}/etc/ssl/certs/pi-launch-control-key.pem
 }
 
 setup_wifi() {
@@ -80,6 +95,7 @@ ROOTFS_POSTPROCESS_COMMAND += " \
     setup_wpa_supplicant ; \
     disable_gettys ; \
     setup_wifi ; \
+    setup_certs ;\
 "
 
 export IMAGE_BASENAME = "pimetheus-image"
