@@ -22,6 +22,7 @@ do_compile() {
 
 do_install() {
 	install -d ${D}${bindir}
+	install -m 0755 eepmake ${D}${bindir}
 	install -m 0755 eepdump ${D}${bindir}
 	install -m 0755 eepflash.sh ${D}${bindir}
 }

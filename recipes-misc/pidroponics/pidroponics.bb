@@ -1,16 +1,16 @@
-DESCRIPTION = "Use a raspberry pi to control model rocket launches."
+DESCRIPTION = "Use a raspberry pi to control hydroponics."
 SECTION = "misc"
-HOMEPAGE = "https://github.com/bvarner/pi-launch-control/"
+HOMEPAGE = "https://github.com/bvarner/pidroponics/"
 
 LICENSE = "APSL-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/APSL-2.0;md5=f9e4701d9a216a87ba145bbe25f54c58"
 
-SRCNAME = "pi-launch-control"
+SRCNAME = "pidroponics"
 PKG_NAME = "github.com/bvarner/${SRCNAME}"
 SRC_URI = "\
-	git://${PKG_NAME};branch=feature/es6app \
-	file://systemd-units/pi-launch-control.service \
-	file://avahi/pi-launch-control.service \
+	git://git@github.com:/bvarner/pidroponics.git;branch=develop;protocol=ssh \
+	file://systemd-units/pidroponics.service \
+	file://avahi/pidroponics.service \
 "
 SRCREV = "${AUTOREV}"
 
@@ -38,7 +38,6 @@ do_compile_prepend() {
 }
 ## end godep hacking
 
-
 inherit gorice systemd
 
 GO_LINKSHARED = ''
@@ -50,9 +49,6 @@ RICE_ARGS = "-v -i ${GO_IMPORT}/${SRCNAME}"
 # Set it up to append to the exec in a zip format.
 GO_RICE_EMBEDTYPE = 'go'
 #GO_RICE_APPEND = 'yes'
-
-
-
 
 do_install_append() {
 	install -d ${D}${systemd_unitdir}/system

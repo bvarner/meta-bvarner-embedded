@@ -1,0 +1,11 @@
+[Unit]
+Description=PiDroponics
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/pidroponics
+ 
+[Install]
+WantedBy=multi-user.target

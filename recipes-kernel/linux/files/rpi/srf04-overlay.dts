@@ -1,0 +1,88 @@
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/pinctrl/bcm2835.h>
+#include <dt-bindings/gpio/gpio.h>
+
+/* Overlay for Multiple SRF04 (HC-SR04) Ultrasonic ranging detectors on GPIO.
+   
+   dev0:
+       gpio5 -> trigger
+       gpio6 -> echo
+   dev1:
+       gpio16 -> trigger
+       gpio17 -> echo
+   dev2:
+       gpio25 -> trigger
+       gpio26 -> echo
+*/
+/ {
+	compatible = "brcm,bcm2835", "brcm,bcm2708";
+	
+	fragment@0 {
+		target = <&gpio>;
+		__overlay__ {
+			transponder_0_pins: transponder_0_pins {
+				brcm,pins = <5 6>;
+				brcm,function = <
+					BCM2835_FSEL_GPIO_OUT
+					BCM2835_FSEL_GPIO_IN
+				>;
+			};
+			transponder_1_pins: transponder_1_pins {
+				brcm,pins = <16 17>;
+				brcm,function = <
+					BCM2835_FSEL_GPIO_OUT
+					BCM2835_FSEL_GPIO_IN
+				>;
+			};
+			transponder_2_pins: transponder_2_pins {
+				brcm,pins = <25 26>;
+				brcm,function = <
+					BCM2835_FSEL_GPIO_OUT
+					BCM2835_FSEL_GPIO_IN
+				>;
+			};
+		};
+	};
+	
+	fragment@1 {
+		target-path = "/";
+		__overlay__ {
+			proximity0: proximity@0 {
+				compatible = "devantech,srf04";
+				
+				pinctrl-names = "default";
+				pinctrl-0 = <&transponder_0_pins>;
+				
+				trig-gpios = <&gpio 5 GPIO_ACTIVE_HIGH>;
+				echo-gpios = <&gpio 6 GPIO_ACTIVE_HIGH>;
+				
+				status = "okay";
+			};
+			proximity1: proximity@1 {
+				compatible = "devantech,srf04";
+				
+				pinctrl-names = "default";
+				pinctrl-0 = <&transponder_1_pins>;
+				
+				trig-gpios = <&gpio 16 GPIO_ACTIVE_HIGH>;
+				echo-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
+				
+				status = "okay";
+			};
+			proximity2: proximity@2 {
+				compatible = "devantech,srf04";
+				
+				pinctrl-names = "default";
+				pinctrl-0 = <&transponder_2_pins>;
+				
+				trig-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
+				echo-gpios = <&gpio 26 GPIO_ACTIVE_HIGH>;
+				
+				status = "okay";
+			};
+		};
+	};
+	
+	
+};
