@@ -4,17 +4,24 @@
 #include <dt-bindings/gpio/gpio.h>
 
 /* Overlay for Multiple SRF04 (HC-SR04) Ultrasonic ranging detectors on GPIO.
+   Setup for Raspbery PIs (bcm2835 gpios)
    
-   dev0:
-       gpio5 -> trigger
-       gpio6 -> echo
-   dev1:
-       gpio16 -> trigger
-       gpio17 -> echo
-   dev2:
-       gpio25 -> trigger
-       gpio26 -> echo
+	Default values which can be overridden.
+	
+	proximity_0_
+	   enable = "okay"
+       trig-gpios = 16
+       echo-gpios = 13
+    proximity_1_
+	   enable = "okay"
+       trig-gpios = 5
+       echo-gpios = 6
+    proximity_2_
+	   enable = "okay"
+       trig-gpios = 25
+       echo-gpios = 17
 */
+
 / {
 	compatible = "brcm,bcm2835", "brcm,bcm2708";
 	
@@ -22,24 +29,36 @@
 		target = <&gpio>;
 		__overlay__ {
 			transponder_0_pins: transponder_0_pins {
+				brcm,pins = <16 13>;
+				brcm,function = <
+					BCM2835_FSEL_GPIO_OUT
+					BCM2835_FSEL_GPIO_IN
+				>;
+				brcm,pull = <
+					BCM2835_PUD_DOWN
+					BCM2835_PUD_DOWN
+				>;
+			};
+			transponder_1_pins: transponder_1_pins {
 				brcm,pins = <5 6>;
 				brcm,function = <
 					BCM2835_FSEL_GPIO_OUT
 					BCM2835_FSEL_GPIO_IN
 				>;
+				brcm,pull = <
+					BCM2835_PUD_DOWN
+					BCM2835_PUD_DOWN
+				>;
 			};
-			transponder_1_pins: transponder_1_pins {
-				brcm,pins = <16 17>;
+			transponder_2_pins: transponder_2_pins {
+				brcm,pins = <25 17>;
 				brcm,function = <
 					BCM2835_FSEL_GPIO_OUT
 					BCM2835_FSEL_GPIO_IN
 				>;
-			};
-			transponder_2_pins: transponder_2_pins {
-				brcm,pins = <25 26>;
-				brcm,function = <
-					BCM2835_FSEL_GPIO_OUT
-					BCM2835_FSEL_GPIO_IN
+				brcm,pull = <
+					BCM2835_PUD_DOWN
+					BCM2835_PUD_DOWN
 				>;
 			};
 		};
@@ -54,8 +73,8 @@
 				pinctrl-names = "default";
 				pinctrl-0 = <&transponder_0_pins>;
 				
-				trig-gpios = <&gpio 5 GPIO_ACTIVE_HIGH>;
-				echo-gpios = <&gpio 6 GPIO_ACTIVE_HIGH>;
+				trig-gpios = <&gpio 16 GPIO_ACTIVE_HIGH>;
+				echo-gpios = <&gpio 13 GPIO_ACTIVE_HIGH>;
 				
 				status = "okay";
 			};
@@ -65,8 +84,8 @@
 				pinctrl-names = "default";
 				pinctrl-0 = <&transponder_1_pins>;
 				
-				trig-gpios = <&gpio 16 GPIO_ACTIVE_HIGH>;
-				echo-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
+				trig-gpios = <&gpio 5 GPIO_ACTIVE_HIGH>;
+				echo-gpios = <&gpio 6 GPIO_ACTIVE_HIGH>;
 				
 				status = "okay";
 			};
@@ -77,12 +96,16 @@
 				pinctrl-0 = <&transponder_2_pins>;
 				
 				trig-gpios = <&gpio 25 GPIO_ACTIVE_HIGH>;
-				echo-gpios = <&gpio 26 GPIO_ACTIVE_HIGH>;
+				echo-gpios = <&gpio 17 GPIO_ACTIVE_HIGH>;
 				
 				status = "okay";
 			};
 		};
 	};
 	
-	
+	__overrides__ {
+		proximity_0_enable = <&proximity0>,"status";
+		proximity_1_enable = <&proximity1>,"status";
+		proximity_2_enable = <&proximity2>,"status";
+	};
 };

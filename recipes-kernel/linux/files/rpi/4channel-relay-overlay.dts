@@ -1,0 +1,65 @@
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/pinctrl/bcm2835.h>
+#include <dt-bindings/gpio/gpio.h>
+
+/* 4-Channel Relay Control over GPIO Lines.
+   Default GPIOs: 19, 20, 21, 26
+*/
+
+/ {
+	compatible = "brcm,bcm2835", "brcm,bcm2708";
+	
+	fragment@0 {
+		target = <&gpio>;
+		__overlay__ {
+			relay_pins: relay_pins {
+				brcm,pins = <19 20 21 26>;
+				brcm,function = <
+					BCM2835_FSEL_GPIO_OUT
+					BCM2835_FSEL_GPIO_OUT
+					BCM2835_FSEL_GPIO_OUT
+					BCM2835_FSEL_GPIO_OUT
+				>;
+				brcm,pull = <
+					BCM2835_PUD_UP
+					BCM2835_PUD_UP
+					BCM2835_PUD_UP
+					BCM2835_PUD_UP
+				>;
+			};
+		};
+	};
+	
+	fragment@1 {
+		target = <&leds>;
+		__overlay__ {
+			pinctrl-names = "default";
+			pinctrl-0 = <&relay_pins>;
+		
+			relay0 {
+				label = "relay0";
+				gpios = <&gpio 19 GPIO_ACTIVE_LOW>;
+				default-state = "off";
+			};
+			
+			relay1 {
+				label = "relay1";
+				gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
+				default-state = "off";
+			};
+			
+			relay2 {
+				label = "relay2";
+				gpios = <&gpio 21 GPIO_ACTIVE_LOW>;
+				default-state = "off";
+			};
+			
+			relay3 {
+				label = "relay3";
+				gpios = <&gpio 26 GPIO_ACTIVE_LOW>;
+				default-state = "off";
+			};
+		};
+	};
+};

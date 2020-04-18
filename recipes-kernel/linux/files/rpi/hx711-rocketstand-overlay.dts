@@ -27,7 +27,6 @@
 		__overlay__ {
 			weight0: weight@0 {
 				compatible = "avia,hx711";
-				reg = <0>;
 				
 				pinctrl-names = "default";
 				pinctrl-0 = <&hx711_pins>;

@@ -3,8 +3,12 @@ do_deploy_append() {
         echo "# Enable HX711 load cell" >> ${DEPLOYDIR}/bcm2835-bootfiles/config.txt
         echo "dtoverlay=hx711-rocketstand" >> ${DEPLOYDIR}/bcm2835-bootfiles/config.txt
     fi
-    if [ "${HC-SR04}" = "1" ]; then
+    if [ "${ENABLE_HC-SR04}" = "1" ]; then
     	echo "# Enable HC-SR04 ultrasonic transponders" >> ${DEPLOYDIR}/bcm2835-bootfiles/config.txt
     	echo "dtoverlay=srf04" >> ${DEPLOYDIR}/bcm2835-bootfiles/config.txt
+    fi
+    if [ "${ENABLE_4_CHANNEL_RELAY}" = "1" ]; then
+    	echo "# Enable 4 Channel Relays" >> ${DEPLOYDIR}/bcm2835-bootfiles/config.txt
+    	echo "dtoverlay=4channel-relay" >> ${DEPLOYDIR}/bcm2835-bootfiles/config.txt
     fi
 }

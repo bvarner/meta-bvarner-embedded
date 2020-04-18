@@ -8,7 +8,7 @@ IMAGE_FSTYPES += "rpi-sdimg"
 
 KERNEL_MODULE_AUTOLOAD += "bcm2835-v4l2"
 KERNEL_MODULE_PROBECONF += "bcm2835-v4l2"
-KERNEL_DEVICETREE += " overlays/srf04.dtbo"
+KERNEL_DEVICETREE += " overlays/srf04.dtbo overlays/4channel-relay.dtbo"
 
 # Raspberry pi images...
 DEPENDS += "bcm2835-bootfiles"
