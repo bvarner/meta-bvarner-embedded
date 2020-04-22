@@ -20,6 +20,7 @@ IMAGE_INSTALL += " \
 	tzdata \
 	prometheus \
 	prometheus-node-exporter \
+    i2c-tools \
 	nano \
 "
 

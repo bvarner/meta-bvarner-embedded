@@ -8,8 +8,9 @@ SRC_URI += "file://hx711.cfg \
             file://srf04.cfg \
             file://srf04-overlay.dts;subdir=git/arch/${ARCH}/boot/dts/overlays \
             file://4channel-relay-overlay.dts;subdir=git/arch/${ARCH}/boot/dts/overlays \
+            file://ads1015.cfg \
 "
 
-KERNEL_DEVICETREE += "overlays/hx711-rocketstand.dtbo overlays/srf04.dtbo overlays/4channel-relay.dtbo"
+KERNEL_DEVICETREE += "overlays/hx711-rocketstand.dtbo overlays/srf04.dtbo overlays/4channel-relay.dtbo overlays/ads1115.dtbo "
 KERNEL_MODULE_AUTOLOAD += "iio-trig-sysfs"
 KERNEL_MODULE_AUTOLOAD += "bcm2835-v4l2"
