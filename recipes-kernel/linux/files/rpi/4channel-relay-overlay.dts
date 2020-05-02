@@ -45,19 +45,19 @@
 			
 			relay1 {
 				label = "relay1";
-				gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
+				gpios = <&gpio 26 GPIO_ACTIVE_LOW>;
 				default-state = "off";
 			};
 			
 			relay2 {
 				label = "relay2";
-				gpios = <&gpio 21 GPIO_ACTIVE_LOW>;
+				gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
 				default-state = "off";
 			};
 			
 			relay3 {
 				label = "relay3";
-				gpios = <&gpio 26 GPIO_ACTIVE_LOW>;
+				gpios = <&gpio 21 GPIO_ACTIVE_LOW>;
 				default-state = "off";
 			};
 		};

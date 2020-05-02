@@ -7,8 +7,12 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/APSL-2.0;md5=f9e4701d9a216a87ba
 
 SRCNAME = "pidroponics"
 PKG_NAME = "github.com/bvarner/${SRCNAME}"
+
+# The old git repo...
+# git://git@github.com:/bvarner/pidroponics.git;branch=develop;protocol=ssh
+
 SRC_URI = "\
-	git://git@github.com:/bvarner/pidroponics.git;branch=develop;protocol=ssh \
+	git:///home/bvarner/Documents/go/src/github.com/bvarner/pidroponics/;branch=feature/MVP \
 	file://systemd-units/pidroponics.service \
 	file://avahi/pidroponics.service \
 "
