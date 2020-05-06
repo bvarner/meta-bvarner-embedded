@@ -5,21 +5,6 @@
 
 /* Overlay for Multiple SRF04 (HC-SR04) Ultrasonic ranging detectors on GPIO.
    Setup for Raspbery PIs (bcm2835 gpios)
-   
-	Default values which can be overridden.
-	
-	proximity_0_
-	   enable = "okay"
-       trig-gpios = 16
-       echo-gpios = 13
-    proximity_1_
-	   enable = "okay"
-       trig-gpios = 5
-       echo-gpios = 6
-    proximity_2_
-	   enable = "okay"
-       trig-gpios = 25
-       echo-gpios = 17
 */
 
 / {
@@ -101,6 +86,12 @@
 				status = "okay";
 			};
 		};
+	};
+	
+	__exports__ {
+		proximity0;
+		proximity1;
+		proximity2;
 	};
 	
 	__overrides__ {

@@ -6,9 +6,7 @@ LICENSE = "MIT"
 SDIMG_ROOTFS_TYPE = "ext4"
 IMAGE_FSTYPES += "rpi-sdimg"
 
-KERNEL_MODULE_AUTOLOAD += "bcm2835-v4l2 i2c-dev ti-ads1015 iio_hwmon "
-KERNEL_MODULE_PROBECONF += "bcm2835-v4l2 i2c-dev ti-ads1015 iio_hwmon "
-KERNEL_DEVICETREE += " overlays/srf04.dtbo overlays/4channel-relay.dtbo overlays/ads1115-hwmon.dtbo"
+KERNEL_DEVICETREE += " overlays/srf04.dtbo overlays/4channel-relay.dtbo overlays/ads1115-pidroponic.dtbo"
 
 # Raspberry pi images...
 DEPENDS += "bcm2835-bootfiles"

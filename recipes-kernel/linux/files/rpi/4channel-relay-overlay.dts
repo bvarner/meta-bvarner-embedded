@@ -62,4 +62,11 @@
 			};
 		};
 	};
+	
+	__exports__ {
+		relay0;
+		relay1;
+		relay2;
+		relay3;
+	};
 };
