@@ -1,5 +1,6 @@
 /*
  * TI ADS1115 multi-channel ADC overlay
+ * Configured for hwmon exposure plus NTC thermistors configured on the upper three channels.
  */
 
 /dts-v1/;
@@ -15,7 +16,7 @@
 			#size-cells = <0>;
 			status = "okay";
 
-			ads1115: ads1115 {
+			ads1115: pidroponic-adc {
 				compatible = "ti,ads1115";
 				status = "okay";
 				#address-cells = <1>;
@@ -29,7 +30,7 @@
 				channel_a: channel_a {
 					reg = <4>;
 					ti,gain = <1>;
-					ti,datarate = <7>;
+					ti,datarate = <4>;
 				};
 
 				/*
@@ -38,19 +39,19 @@
 				channel_b: channel_b {
 					reg = <5>;
 					ti,gain = <1>;
-					ti,datarate = <7>;
+					ti,datarate = <4>;
 				};
 	
 				channel_c: channel_c {
 					reg = <6>;
 					ti,gain = <1>;
-					ti,datarate = <7>;
+					ti,datarate = <4>;
 				};
 	
 				channel_d: channel_d {
 					reg = <7>;
 					ti,gain = <1>;
-					ti,datarate = <7>;
+					ti,datarate = <4>;
 				};
 			};
 		};
@@ -60,13 +61,17 @@
 	fragment@1 {
 		target-path = "/";
 		__overlay__ {
-			iio-hwmon {
+		    /* The ads1x15 driver exports all 8 channels, but we only want to pay attention to these */
+			pidroponic-hwmon {
 				compatible = "iio-hwmon";
-				io-channels = <&ads1115 0>, <&ads1115 1>, <&ads1115 2>, <&ads1115 3>;
+				io-channels = <&ads1115 4>, <&ads1115 5>, <&ads1115 6>, <&ads1115 7>;
 			};
 		};
 	};
 	
+	/*
+	 * Disable channels for iio-hwmon, or the driver complains / fails to load
+	 */
 	fragment@2 {
 		target-path = "/clocks/clock@3";
 		__overlay__ {
@@ -81,31 +86,34 @@
 		};
 	};
 	
+	/*
+	 * Add the Thermistor definitions
+	 */
 	fragment@4 {
 		target-path = "/";
 		__overlay__ {
 			therm0: therm@0 {
 				compatible = "murata,ncp03wf104";
 				pullup-uv = <3300000>;
-				pullup-ohm = <4700>;
+				pullup-ohm = <3900>;
 				pulldown-ohm = <0>;
-				io-channels = <&ads1115 1>;
+				io-channels = <&ads1115 5>;
 			};
 			
 			therm1: therm@1 {
 				compatible = "murata,ncp03wf104";
 				pullup-uv = <3300000>;
-				pullup-ohm = <4700>;
+				pullup-ohm = <3900>;
 				pulldown-ohm = <0>;
-				io-channels = <&ads1115 2>;
+				io-channels = <&ads1115 6>;
 			};
 			
 			therm2: therm@2 {
 				compatible = "murata,ncp03wf104";
 				pullup-uv = <3300000>;
-				pullup-ohm = <4700>;
+				pullup-ohm = <3900>;
 				pulldown-ohm = <0>;
-				io-channels = <&ads1115 3>;
+				io-channels = <&ads1115 7>;
 			};
 		};
 	};
@@ -118,16 +126,12 @@
 	};
 	
 	__overrides__ {
-		adc_in0_cfg =         <&channel_a>,"reg:0";
 		adc_in0_gain =        <&channel_a>,"ti,gain:0";
 		adc_in0_datarate =    <&channel_a>,"ti,datarate:0";
-		adc_in1_cfg =         <&channel_b>,"reg:0";
 		adc_in1_gain =        <&channel_b>,"ti,gain:0";
 		adc_in1_datarate =    <&channel_b>,"ti,datarate:0";
-		adc_in2_cfg =         <&channel_c>,"reg:0";
 		adc_in2_gain =        <&channel_c>,"ti,gain:0";
 		adc_in2_datarate =    <&channel_c>,"ti,datarate:0";
-		adc_in3_cfg =         <&channel_d>,"reg:0";
 		adc_in3_gain =        <&channel_d>,"ti,gain:0";
 		adc_in3_datarate =    <&channel_d>,"ti,datarate:0";
 	};
