@@ -27,6 +27,10 @@ RDEPENDS_${PN}_append = "\
 	avahi-autoipd \
 "
 
+RDEPENDS_${PN}-dev_append = "\
+	bash \
+"
+
 RDEPENDS_${PN}-staticdev_append = "\
 	perl \
 	bash \
