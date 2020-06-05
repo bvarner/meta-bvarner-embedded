@@ -38,10 +38,8 @@ IMAGE_INSTALL += " \
 IMAGE_INSTALL += " \
 	userland \
 	pidroponics \
-    libiio \
-    libiio-tests \
-    strace \
-    dtc \
+	prometheus \
+	prometheus-node-exporter \
 "
 
 # WiFi Support
@@ -91,11 +89,18 @@ setup_certs() {
 	#cp /path/tofile/on/your/machine ${IMAGE_ROOTFS}/etc/ssl/certs/pi-launch-control-key.pem
 }
 
+prometheus_config() {
+	echo "Configuring Prometheus"
+	
+	
+}	
+
 ROOTFS_POSTPROCESS_COMMAND += " \
     set_local_timezone ; \
     setup_wpa_supplicant ; \
     disable_gettys ; \
     setup_certs ;\
+    prometheus_config ;\
 "
 
 export IMAGE_BASENAME = "pidroponics-image"
