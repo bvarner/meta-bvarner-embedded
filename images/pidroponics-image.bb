@@ -38,7 +38,7 @@ IMAGE_INSTALL += " \
 IMAGE_INSTALL += " \
 	userland \
 	pidroponics \
-	prometheus \
+	prometheus-makebuild \
 	prometheus-node-exporter \
 "
 
@@ -91,9 +91,29 @@ setup_certs() {
 
 prometheus_config() {
 	echo "Configuring Prometheus"
+	mkdir -p ${IMAGE_ROOTFS}/etc/prometheus
+
+	# Global Config
+	echo 'global:' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '  scrape_interval: 10s' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '  external_labels:' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '    monitor: '\''pidroponics-monitor'\' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
 	
+	# Scrape the node-exporter. (using global config)
+	echo 'scrape_configs:' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '  - job_name: '\''system'\' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '    static_configs:' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '      - targets: ['\''localhost:9100'\'']' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
 	
-}	
+	# Scrape pidroponics.
+	echo '  - job_name: '\''pidroponics'\' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '    scrape_interval: 2s' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '    static_configs:' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '      - targets: ['\''localhost:443'\'']' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '    scheme: https' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '    tls_config:' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+	echo '      insecure_skip_verify: true' >> ${IMAGE_ROOTFS}/etc/prometheus/prometheus.yml
+}
 
 ROOTFS_POSTPROCESS_COMMAND += " \
     set_local_timezone ; \

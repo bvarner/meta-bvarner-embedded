@@ -1,0 +1,9 @@
+[Unit]
+Description=Prometheus
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/prometheus --config.file /etc/prometheus/prometheus.yml  --storage.tsdb.path /var/prometheus/data/  --web.user-assets /var/prometheus/ui
+
+[Install]
+WantedBy=default.target

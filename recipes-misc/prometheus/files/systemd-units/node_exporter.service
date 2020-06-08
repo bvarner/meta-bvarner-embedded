@@ -1,11 +1,11 @@
 [Unit]
-Description=Pidroponics
+Description=Prometheus Node Exporter
 Wants=network-online.target
 After=network.target network-online.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/pidroponics
- 
+ExecStart=/usr/bin/node_exporter
+
 [Install]
 WantedBy=default.target

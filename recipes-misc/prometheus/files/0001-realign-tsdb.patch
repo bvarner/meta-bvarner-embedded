@@ -1,0 +1,34 @@
+From 6e6e43bb34771ebd05bbb45339ee3990212573fa Mon Sep 17 00:00:00 2001
+From: Bryan Varner <1652015+bvarner@users.noreply.github.com>
+Date: Fri, 5 Jun 2020 13:42:45 -0400
+Subject: [PATCH] This might just work.
+
+---
+ tsdb/chunks/head_chunks.go | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/tsdb/chunks/head_chunks.go b/tsdb/chunks/head_chunks.go
+index 486d498d..f4e783ae 100644
+--- a/src/github.com/prometheus/prometheus/tsdb/chunks/head_chunks.go
++++ b/src/github.com/prometheus/prometheus/tsdb/chunks/head_chunks.go
+@@ -78,13 +78,16 @@ func (e *CorruptionErr) Error() string {
+ // ChunkDiskMapper is for writing the Head block chunks to the disk
+ // and access chunks via mmapped file.
+ type ChunkDiskMapper struct {
++	// Keep all 64bit atomically accessed variables at the top of this struct.
++	// See https://golang.org/pkg/sync/atomic/#pkg-note-BUG for more info.
++	curFileNumBytes int64 // Bytes written in current open file.
++
+ 	/// Writer.
+ 	dir *os.File
+ 
+ 	curFile         *os.File // File being written to.
+ 	curFileSequence int      // Index of current open file being appended to.
+ 	curFileMaxt     int64    // Used for the size retention.
+-	curFileNumBytes int64    // Bytes written in current open file.
+ 
+ 	byteBuf      [MaxHeadChunkMetaSize]byte // Buffer used to write the header of the chunk.
+ 	chkWriter    *bufio.Writer              // Writer for the current open file.
+-- 
+2.25.1
+
