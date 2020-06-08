@@ -38,7 +38,7 @@ IMAGE_INSTALL += " \
 IMAGE_INSTALL += " \
 	userland \
 	pidroponics \
-	prometheus-makebuild \
+	prometheus \
 	prometheus-node-exporter \
 "
 
