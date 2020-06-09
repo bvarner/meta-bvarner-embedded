@@ -6,8 +6,7 @@ LICENSE = "APSL-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/APSL-2.0;md5=f9e4701d9a216a87ba145bbe25f54c58"
 
 SRC_URI = "\
-	git://${GO_IMPORT} \
-	file://0001-realign-tsdb.patch \
+	git://${GO_IMPORT};branch=release-2.19 \
 	file://systemd-units/prometheus.service \
 "
 SRCREV = "${AUTOREV}"

@@ -4,7 +4,8 @@ LICENSE = "MIT"
 
 # Sets us up to use ext4 and generate an rpi-sdimg that'll boot
 SDIMG_ROOTFS_TYPE = "ext4"
-IMAGE_FSTYPES += "rpi-sdimg"
+IMAGE_FSTYPES += "wic wic.bmap"
+WKS_FILE = "sdimage-raspberrypi-persistentvar.wks"
 
 KERNEL_DEVICETREE += " overlays/srf04.dtbo overlays/4channel-relay.dtbo overlays/ads1115-pidroponic.dtbo"
 
@@ -13,8 +14,7 @@ DEPENDS += "bcm2835-bootfiles"
 
 IMAGE_LINGUAS = "en-us"
 
-# For now, let us write.
-#IMAGE_FEATURES += "read-only-rootfs"
+IMAGE_FEATURES += "read-only-rootfs"
 IMAGE_FEATURES += "ssh-server-openssh"
 EXTRA_IMAGE_FEATURES += "debug-tweaks"
 
