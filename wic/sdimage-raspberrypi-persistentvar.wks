@@ -2,6 +2,10 @@
 # long-description: Creates a partitioned SD card image for use with
 # Raspberry Pi. Boot files are located in the first vfat partition, a large /var partition exists.
 
+# 16gb sdhc card: - 2% free space (for wear leveling) - boot part - rootfs size - swap = /var size.
+# 16384 - 3276 - 20 - rootfssize - 2048 = /var
+
 part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boot --active --align 4096 --size 20
 part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096
-part /var --ondisk mmcblk0 --fstype=ext4 --label var --align 4096 --size 2048 --fsoptions=noatime
+part swap --ondisk mmcblk0 --fstype=swap --label swap --align 4096 --size 2048
+part /var --ondisk mmcblk0 --fstype=ext4 --label var --align 4096 --size 10240 --fsoptions=noatime
