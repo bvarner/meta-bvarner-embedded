@@ -6,7 +6,7 @@ LICENSE = "APSL-2.0"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/APSL-2.0;md5=f9e4701d9a216a87ba145bbe25f54c58"
 
 SRC_URI = "\
-	git://${GO_IMPORT};branch=release-2.19 \
+	git://${GO_IMPORT};branch=release-2.21 \
 	file://systemd-units/prometheus.service \
 "
 SRCREV = "${AUTOREV}"
@@ -64,7 +64,6 @@ do_install() {
 	install -d ${D}${bindir}
 	install -m 0755 ${B}/src/${GO_IMPORT}/prometheus ${D}${bindir}/
 	install -m 0755 ${B}/src/${GO_IMPORT}/promtool ${D}${bindir}/
-	install -m 0755 ${B}/src/${GO_IMPORT}/tsdb/tsdb ${D}${bindir}/
 	
 	install -d ${D}${sysconfdir}/prometheus
 	install -d ${D}${localstatedir}/prometheus/data
