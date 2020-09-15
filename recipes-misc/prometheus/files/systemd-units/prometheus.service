@@ -3,7 +3,7 @@ Description=Prometheus
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/prometheus --config.file /etc/prometheus/prometheus.yml  --storage.tsdb.path /var/prometheus/data/  --web.user-assets /var/prometheus/ui
+ExecStart=/usr/bin/prometheus --config.file /etc/prometheus/prometheus.yml  --storage.tsdb.path /var/prometheus/data/  --web.user-assets /var/prometheus/ui --log.level=warn
 
 [Install]
 WantedBy=default.target
